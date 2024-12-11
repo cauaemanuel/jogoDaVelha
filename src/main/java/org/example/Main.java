@@ -15,60 +15,49 @@ public class Main {
 
         char[][] tabuleiro = inicializarTabuleiro(criarTabuleiro(teclado.nextInt()));
 
+
         char UsuarioCaracter = obterCaractereUsuario(teclado);
         char CpuCaracter = obterCaractereComputador(teclado, UsuarioCaracter);
-
+        teclado.nextLine();
         //Inicio do tabuleiro - final do Escopo
 
         boolean vezUsuarioJogar = sortearValorBooleano();
         boolean jogoContinua;
 
         do {
-            // controla se o jogo terminou
+            // controla se o jogo terminous
             jogoContinua = true;
-            //TODO: Exiba o tabuleiro aqui
+
             exibirTabuleiro(tabuleiro);
+            if ( vezUsuarioJogar ){
 
-
-            if ( vezUsuarioJogar/*TODO: com base no bloco defina o critério */ ){
-                //TODO: Execute processar vez do usuario
                 tabuleiro = processarVezUsuario(teclado, tabuleiro, UsuarioCaracter);
-
                 // Verifica se o usuario venceu
-                //TODO: Este if deve executar apenas se teve ganhador
-                if ( teveGanhador(tabuleiro, UsuarioCaracter)/*TODO: esreva aqui a chamada para teve ganhador*/ ) {
-                    exibirVitoriaUsuario();//TODO: Exiba que o usuario ganhou
+                if ( teveGanhador(tabuleiro, UsuarioCaracter) ) {
+                    exibirVitoriaUsuario();
                     jogoContinua = false;
                 }
 
-                //TODO: defina qual o vaor a variavel abaixo deve possuir
                 vezUsuarioJogar = false;
             } else {
 
-                //TODO: Execute processar vez do computador
+                limparTela();
                 tabuleiro = processarVezComputador(tabuleiro, CpuCaracter);
-
                 // Verifica se o computador venceu
-                //TODO: Este if deve executar apenas se teve ganhador
                 if ( teveGanhador(tabuleiro, CpuCaracter)/*esreva aqui a chamada para teve ganhador*/ ) {
-                    //TODO: Exiba que o computador ganhou
+
                     exibirVitoriaComputador();
                     jogoContinua = false;
                 }
-
-                //TODO: defina qual o vaor a variavel abaixo deve possuir
                 vezUsuarioJogar = true;
             }
-
-            //TODO: Este if deve executar apenas se o jogo continua E
             //ocorreu tempate. Utilize o metodo teveEmpate()
-            if ( teveEmpate(tabuleiro)/*escreva aqui a condicao conforme o TODO acima*/ ) {
+            if ( teveEmpate(tabuleiro)) {
 
                 exibirEmpate();
                 jogoContinua = false;
             }
         } while (jogoContinua);
-
         teclado.close();
 
     }
@@ -152,6 +141,7 @@ public class Main {
                 System.out.printf("\n%sErro! Digite um caractere disponível.%s\n\n", "\033[0;31m", "\033[0m");
             }
         }
+
     }
 
 
@@ -174,15 +164,13 @@ public class Main {
         return true;
     }
 
-
-
     public static int[] obterJogadaUsuario(char[][] tabuleiro, Scanner teclado, char caracter) {
         final int TAMANHO_TABULEIRO = 3; // Facilita alterações no futuro
         int[] jogada = new int[2];
         boolean jogadaValida = false;
 
         while (!jogadaValida) {
-            System.out.print("Digite a linha e a coluna separados por um espaço (exemplo: 1 2): \n" );
+            System.out.println("Digite a linha e a coluna separados por um espaço (exemplo: 1 2): " );
             String entrada = teclado.nextLine().trim();
 
 
@@ -239,24 +227,25 @@ public class Main {
     }
 
     public static void exibirTabuleiro(char[][] tabuleiro) {
-      System.out.println(retornarPosicoesLivres(tabuleiro));
+        System.out.println(retornarPosicoesLivres(tabuleiro));
     }
 
     public static char[][] processarVezUsuario(Scanner teclado, char[][] tabuleiro, char caractereUsuario) {
-        System.out.println("É a sua vez de jogar!");
-
         // Obtém a jogada do usuário
         int[] jogada = obterJogadaUsuario(tabuleiro, teclado, caractereUsuario);
 
         // Atualiza o tabuleiro com a jogada do usuário
         tabuleiro = retornarTabuleiroAtualizado(tabuleiro, jogada, caractereUsuario);
 
+        limparTela();
+
+
+        System.out.println("\n Agora é a vez do computador!");
         return tabuleiro;
     }
 
     //vez do computador
     public static char[][] processarVezComputador(char[][] tabuleiro, char caractereComputador) {
-        System.out.println("Agora é a vez do computador!");
 
         // Obtém a jogada do computador
         int[] jogada = obterJogadaComputador(tabuleiro, caractereComputador);
@@ -265,7 +254,11 @@ public class Main {
 
         tabuleiro = retornarTabuleiroAtualizado(tabuleiro, jogada, caractereComputador);
 
+        limparTela();
+
+        System.out.println("\n É a sua vez de jogar!");
         return tabuleiro;
+
     }
 
     public static char[][] retornarTabuleiroAtualizado(char[][] tabuleiro, int[] jogada, char caractereJogador) {
@@ -276,7 +269,7 @@ public class Main {
         if (linha >= 0 && linha < tabuleiro.length && coluna >= 0 && coluna < tabuleiro[0].length) {
             tabuleiro[linha][coluna] = caractereJogador;
         } else {
-            System.out.println("Jogada inválida! As coordenadas estão fora dos limites.");
+            throw new RuntimeException("Jogada inválida! As coordenadas estão fora dos limites.");
         }
         return tabuleiro;
     }
@@ -330,7 +323,6 @@ public class Main {
         for (int i = 0; i < tabuleiro.length; i++) {
             boolean linhaCompleta = true;
             for (int j = 0; j < tabuleiro[0].length; j++) {
-
                 if (tabuleiro[i][j] != caractereJogador) {
                     linhaCompleta = false;
                     break;
@@ -379,7 +371,6 @@ public class Main {
     }
 
     public static boolean sortearValorBooleano() {
-
         boolean b;
         Random aleatorio = new Random();
         if (aleatorio.nextBoolean()) {
@@ -389,7 +380,6 @@ public class Main {
             b = false;
             System.out.println("Máquina começa");
         }
-
         return b;
     }
 
@@ -405,20 +395,20 @@ public class Main {
         return true;
     }
 
-public static void exibirEmpate() {
-    System.out.print("Ocorreu empate!");
+    public static void exibirEmpate() {
+        System.out.println("Ocorreu empate!");
 
-                 System.out.println("  +---------+                            +---------+"  );
-                 System.out.println("  | +-----+ |      **            **      | +-----+ |"  );
-                 System.out.println("  | |     | |        **        **        | +-----+ |"  );
-                 System.out.println("  | |     | |          **    **          | +-----+ |"  );
-                 System.out.println("  | |     | |             **             | +-----+ |"  );
-                 System.out.println("  | |     | |          **    **          | +-----+ |"  );
-                 System.out.println("  | +-----+ |        **        **        | +-----+ |"  );
-                 System.out.println("  +---------+      **            **      +---------+"  );
+        System.out.println("  +---------+                            +---------+"  );
+        System.out.println("  | +-----+ |      **            **      | +-----+ |"  );
+        System.out.println("  | |     | |        **        **        | +-----+ |"  );
+        System.out.println("  | |     | |          **    **          | +-----+ |"  );
+        System.out.println("  | |     | |             **             | +-----+ |"  );
+        System.out.println("  | |     | |          **    **          | +-----+ |"  );
+        System.out.println("  | +-----+ |        **        **        | +-----+ |"  );
+        System.out.println("  +---------+      **            **      +---------+"  );
 
 
- }
+    }
 
     public static String retornarPosicoesLivres(char[][] tabuleiro){
         StringBuilder resultSet = new StringBuilder();
@@ -435,7 +425,6 @@ public static void exibirEmpate() {
             for(int j = 0 ; j < tabuleiro[0].length; j++){
                 resultSet.append(tabuleiro[i][j] + " | ");
             }
-
             resultSet.append("\n");
         }
         return resultSet.toString();
@@ -451,26 +440,29 @@ public static void exibirEmpate() {
         /*Executa o comando de limpar o terminal baseado
         em qual sistema operacional é utilizado pelo usuário,
         exibindo uma mensagem de erro em caso de exceções*/
-        try {
-            if (System.getProperty("os.name").contains("Windows")) {
-                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
-            } else {
-                new ProcessBuilder("clear").inheritIO().start().waitFor();
+        try{
+            final String os = System.getProperty("os.name");
+
+            if (os.contains("Windows")){
+                Runtime.getRuntime().exec("cls");
+
+            }else{
+                Runtime.getRuntime().exec("clear");
             }
-        } catch (Exception e) {
-            System.out.println("Erro ao limpar a tela: " + e.getMessage());
+        }
+        catch (final Exception e){
+            //  Tratar Exceptions
         }
     }
 
     public static String bemvindo(){
         String mensagemBoasVindas = """
 ████████████████████████████████████████████████
-█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░█
-█░░░ Bem-vindo ao Jogo da Velha! 🎮░░░░░░░░░░░░█
-█░░░ Mostre sua estratégia e vença o desafio!░░█
-█░░░ Aqui, o tabuleiro será do tamanho que você░█
-█░░░ escolher! Personalize e prepare-se para    █
-█░░░ partidas ainda mais emocionantes! ⚔️      █
+█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░██
+█░░░ Bem-vindo ao Jogo da Velha!   ░░░░░░░░░░░░█
+█░░░ O tabuleiro será do tamanho que você  ░░░░█
+█░░░ escolher! Personalize e prepare-se para   █
+█░░░ partidas ainda mais emocionantes!         █
 █░░░                                           █
 █░░░ Exemplo de um tabuleiro 3x3:              █
 █░░░                                           █
@@ -479,11 +471,10 @@ public static void exibirEmpate() {
 █░░░    4 | 5 | 6                              █
 █░░░   -----------                             █
 █░░░    7 | 8 | 9                              █
-█░░░                                           █
-█░░░ Boa sorte e divirta-se! 🏆                █
-█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░█
+█░░░ Boa sorte e divirta-se!                   █
+█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░██
 ████████████████████████████████████████████████
 """;
-     return mensagemBoasVindas;
+        return mensagemBoasVindas;
     }
 }
