@@ -34,6 +34,8 @@ public class Main {
                 tabuleiro = processarVezUsuario(teclado, tabuleiro, UsuarioCaracter);
                 // Verifica se o usuario venceu
                 if ( teveGanhador(tabuleiro, UsuarioCaracter) ) {
+                    System.out.println("WINNNNN USUARIO");
+                    exibirTabuleiro(tabuleiro);
                     exibirVitoriaUsuario();
                     jogoContinua = false;
                 }
@@ -45,7 +47,8 @@ public class Main {
                 tabuleiro = processarVezComputador(tabuleiro, CpuCaracter);
                 // Verifica se o computador venceu
                 if ( teveGanhador(tabuleiro, CpuCaracter)/*esreva aqui a chamada para teve ganhador*/ ) {
-
+                    System.out.println("WINNNNN CPU");
+                    exibirTabuleiro(tabuleiro);
                     exibirVitoriaComputador();
                     jogoContinua = false;
                 }
@@ -240,7 +243,8 @@ public class Main {
         limparTela();
 
 
-        System.out.println("\n Agora é a vez do computador!");
+        System.out.println("Agora é a vez do computador!");
+        System.out.println();
         return tabuleiro;
     }
 
@@ -256,7 +260,8 @@ public class Main {
 
         limparTela();
 
-        System.out.println("\n É a sua vez de jogar!");
+        System.out.println("É a sua vez de jogar!");
+        System.out.println();
         return tabuleiro;
 
     }
